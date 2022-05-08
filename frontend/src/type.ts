@@ -9,12 +9,19 @@ export type UserResponse = {
   
 export type Users = User[]
 
+export type LikeNotification = {
+    id: number,
+    user_id: number,
+    post_id: number,
+}
+
 export type Posts = {
     date_posted: string,
     id: number,
     image_url: string,
     title: string,
-    user_id: number
+    user_id: number,
+    liked_by_users: LikeNotification[]
 }
 
 export type PostResponse = {

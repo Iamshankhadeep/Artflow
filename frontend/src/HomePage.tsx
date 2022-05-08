@@ -35,6 +35,7 @@ const HomePage: React.FC<{user: UserResponse}> = ({user}) => {
         console.log(json,'posts')
         setPosts(json)
     }
+
     useEffect(()=>{
         getPosts()
     },[])
@@ -50,7 +51,7 @@ const HomePage: React.FC<{user: UserResponse}> = ({user}) => {
                 <Button variant="contained" onClick={getARandomImage}>Create A Image</Button>
             </Box>
             <Typography>
-                {posts && <ListingCard posts={posts} />}
+                {posts && <ListingCard posts={posts} user={user} getPosts={getPosts}/>}
             </Typography>
         </Container>
     )
