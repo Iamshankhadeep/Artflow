@@ -1,6 +1,12 @@
 from flask import request, jsonify
-from notification import app, db, ma
+from notification import app, db, ma, socketio
+from flask_socketio import emit
 from notification.models import User, ImagePost, UserSchema, ImagePostSchema, LikeNotificationSchema, LikeNotification
+
+@socketio.on('like_event')
+def handle_like_event(data):
+    print(data)
+    # emit('like_event', data, broadcast=True)
 
 @app.route('/post', methods=['GET', 'POST'])
 def post():
@@ -15,7 +21,6 @@ def post():
         return jsonify({'message': 'Post created successfully'})
     if request.method == 'GET':
         images = ImagePost.query.all()
-        print(images[0].liked_by_users)
         image_schema = ImagePostSchema()
         all_images = image_schema.dump(images, many=True)
         response = jsonify({"posts": all_images})
@@ -28,10 +33,17 @@ def like():
         data = request.get_json(force=True)
         user_id = data['user_id']
         post_id = data['post_id']
+        user = User.query.filter_by(id=user_id).first()
         image_post = ImagePost.query.filter_by(id=post_id).first()
         like = LikeNotification(user_id=user_id, post_id=post_id, like=image_post)
         db.session.add(like)
         db.session.commit()
+        image_post = ImagePost.query.filter_by(id=post_id).first()
+        image_schema = ImagePostSchema()
+        user_schema = UserSchema()
+        user_data = user_schema.dump(user)
+        image_data = image_schema.dump(image_post)
+        socketio.emit('like_event', {'post': image_data,'user': user_data}, broadcast=True)
         return jsonify({'message': 'Post liked successfully'})
     if request.method == 'DELETE':
         data = request.get_json(force=True)

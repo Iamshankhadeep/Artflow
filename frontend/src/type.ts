@@ -15,7 +15,7 @@ export type LikeNotification = {
     post_id: number,
 }
 
-export type Posts = {
+export type Post = {
     date_posted: string,
     id: number,
     image_url: string,
@@ -25,6 +25,11 @@ export type Posts = {
 }
 
 export type PostResponse = {
-    posts: Posts[]
+    posts: Post[]
+}
+
+export type LikeEvent = {
+    post: Post,
+    user: User
 }
   

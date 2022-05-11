@@ -17,7 +17,7 @@ function App() {
   };
 
   const handleSubmit = () => {
-    fetch('http://localhost:5002/login', {
+    fetch('http://localhost:8000/login', {
       method: 'POST',
       body: JSON.stringify({
         email

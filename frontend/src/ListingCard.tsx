@@ -1,14 +1,14 @@
 import React from 'react';
 import { CardActionArea, Card, Grid, CardMedia, CardContent, Box, Typography, Divider, CardActions, IconButton } from '@mui/material';
 import {FavoriteBorder} from '@mui/icons-material'
-import {PostResponse, UserResponse, Posts} from './type'
+import {PostResponse, UserResponse, Post} from './type'
 
 const ListingCard: React.FC<{posts: PostResponse, user: UserResponse, getPosts: () => Promise<void> }> = ({posts, user, getPosts}) => {
 
-    const onLikeButtonClick = async (post: Posts) => {
+    const onLikeButtonClick = async (post: Post) => {
       const isPostLikedByUser = isPostLiked(post)
       if(!isPostLikedByUser){
-        const createLikeResponse = await fetch('http://localhost:5002/like', {
+        const createLikeResponse = await fetch('http://localhost:8000/like', {
             method: 'POST',
             body: JSON.stringify({
                 user_id: user.user.id,
@@ -18,7 +18,7 @@ const ListingCard: React.FC<{posts: PostResponse, user: UserResponse, getPosts: 
         await createLikeResponse.json()
       } else {
         const likedPost = post.liked_by_users.find(like => like.user_id === user.user.id)
-        const createLikeResponse = await fetch('http://localhost:5002/like', {
+        const createLikeResponse = await fetch('http://localhost:8000/like', {
             method: 'DELETE',
             body: JSON.stringify({
                 like_id: likedPost?.id
@@ -30,7 +30,7 @@ const ListingCard: React.FC<{posts: PostResponse, user: UserResponse, getPosts: 
       await getPosts()
     }
 
-    const isPostLiked = (post: Posts) => {
+    const isPostLiked = (post: Post) => {
       if(post.liked_by_users.findIndex(like => like.user_id === user.user.id) !== -1){
         return true
       }
