@@ -72,16 +72,17 @@ const HomePage: React.FC<{user: UserResponse}> = ({user}) => {
                 }
                 setState({ ...state, open: true });
             }
-            if(posts){
-                const allPosts = posts.posts
-                const updatedPost: Post[] = allPosts.map(post => {
-                    if(post.id === data.post.id){
-                        return data.post
-                    }
-                    return post
-                })
-                setPosts({posts: updatedPost})
-            }
+            // if(posts){
+            //     const allPosts = posts.posts
+            //     const updatedPost: Post[] = allPosts.map(post => {
+            //         if(post.id === data.post.id){
+            //             return data.post
+            //         }
+            //         return post
+            //     })
+            //     setPosts({posts: updatedPost})
+            // }
+            getPosts()
             console.log(data, 'like_event')
         })
 
